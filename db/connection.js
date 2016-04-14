@@ -1,16 +1,19 @@
 var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var CounterSchema = Schema({
+var CounterSchema = mongoose.Schema({
   _id: {type: String, required: true},
   seq: {type: Number, default: 0}
 });
 
-var UrlSchema = new Schema({
+var UrlSchema = new mongoose.Schema({
   _id: {type: Number, index: true},
   long_url: String,
   created_at: Date
 });
+
+mongoose.model("Counter", CounterSchema);
+mongoose.model("Url", UrlSchema);
 
 UrlSchema.pre("save", function(next){
   var doc = this;
@@ -25,11 +28,17 @@ UrlSchema.pre("save", function(next){
   });
 });
 
-var counter = mongoose.model("Counter", CounterSchema);
-var url = mongoose.model("Url", UrlSchema);
+var Counter = mongoose.model("Counter", CounterSchema);
+var Url = mongoose.model("Url", UrlSchema);
 
-
+// for deploying for production
+// if(process.env.NODE_ENV == "production"){
+//   mongoose.connect(process.env.MONGOLAB_URL);
+// }else{
+//   mongoose.connect("mongodb://localhost/url_shortener");
+// }
 
 mongoose.connect("mongodb://localhost/url_shortener");
 
 module.exports = mongoose;
+module.exports = Url;

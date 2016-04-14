@@ -2,18 +2,28 @@ var express = require("express");
 var hbs = require("express-handlebars");
 var parser = require("body-parser");
 var mongoose = require("./db/connection");
-// needed to correctly concatenate our paths
+var config = require("./config");
+// for encoding and decoding functions
+var base58 = require("./base58.js");
+// //grabs URL model
+// var Url = require("./connection/url");
+// for correctly concatenating our paths
 var path = require('path');
+
+var Counter = mongoose.model("Counter");
+var Url = mongoose.model("Url");
+
+// create a connection to our MongoDB
+// mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
 
 var app = express();
 
-var Url = mongoose.model("Url");
+// handles JSON bodies
+app.use(parser.json());
+// handles URL encoded bodies
+app.use(parser.urlencoded({ extended: true }));
 
-// angular uses json: app.use(parser.json
-app.use(parser.urlencoded({extended: true}));
-
-// tell Express to serve files from our public folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use("/assets", express.static("public"));
 
 app.set("view engine", "hbs");
 
@@ -33,14 +43,40 @@ app.get("/", function(req, res){
   });
 });
 
-
 app.get("/:encoded_id", function(req, res){
    // route to redirect the visitor to their original URL given the short URL
 });
 
+// route to create and return a shortened URL given a long URL
 app.post("/api/shorten", function(req, res){
-   // route to create and return a shortened URL given a long URL
+  var longUrl = req.body.url;
+  var shortUrl = "";
+  // check if url already exists in database
+  Url.findOne({long_url: longUrl}, function(err, docs){
+    if(doc){
+      // URL has already been shortened, so base58 encodes the unique _id of that document and construct the short URL
+      shortUrl = config.webhost + base58.encode(doc._id);
+      // since the URL exists, returns it without creating a new entry
+      res.send({"shortUrl": shortUrl});
+    }else {
+      // creates a new entry
+      var newUrl = Url({
+        long_url: longUrl
+      });
+      // saves the new link
+      newUrl.save(function(err, docs){
+        if(err){
+          console.log(err);
+        }
+        // construct the short URL
+        shortUrl = config.webhost + base58.encode(newUrl._id);
+        res.send({"shortUrl": shortUrl});
+      });
+    }
+  });
  });
+
+
 
 
  // app.get("/:url", function(req, res){
