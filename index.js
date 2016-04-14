@@ -2,18 +2,25 @@ var express = require("express");
 var hbs = require("express-handlebars");
 var parser = require("body-parser");
 var mongoose = require("./db/connection");
+// needed to correctly concatenate our paths
+var path = require('path');
+
 var app = express();
 
 var Url = mongoose.model("Url");
 
 // angular uses json: app.use(parser.json
 app.use(parser.urlencoded({extended: true}));
+
+// tell Express to serve files from our public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set("view engine", "hbs");
 
 app.engine(".hbs", hbs({
   extname:        ".hbs",
-  partialsDir:    "/views",
-  layoutsDir:     "/views",
+  partialsDir:    "views/",
+  layoutsDir:     "views/",
   defaultLayout:  "layout-main"
 }));
 
@@ -25,6 +32,7 @@ app.get("/", function(req, res){
     });
   });
 });
+
 
 app.get("/:encoded_id", function(req, res){
    // route to redirect the visitor to their original URL given the short URL
