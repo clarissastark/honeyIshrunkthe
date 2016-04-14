@@ -13,9 +13,6 @@ var path = require('path');
 var Counter = mongoose.model("Counter");
 var Url = mongoose.model("Url");
 
-// create a connection to our MongoDB
-// mongoose.connect('mongodb://' + config.db.host + '/' + config.db.name);
-
 var app = express();
 
 // handles JSON bodies
@@ -43,8 +40,19 @@ app.get("/", function(req, res){
   });
 });
 
+// route to redirect the visitor to their original URL given the short URL
 app.get("/:encoded_id", function(req, res){
-   // route to redirect the visitor to their original URL given the short URL
+  var base58Id = req.params.encoded_id;
+  var id = base58.decode(base58Id);
+
+  //checks if the URL already exists in db
+Url.findOne({_id: id}, function(err, docs){
+  if (doc){
+    res.redirect(doc.long_url);
+  }else{
+    res.redirect(config.webhost);
+  }
+})
 });
 
 // route to create and return a shortened URL given a long URL

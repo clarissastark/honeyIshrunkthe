@@ -1,0 +1,22 @@
+#link {
+  display: none;
+  padding-top: 15px;
+}
+
+#link a{
+  color: #F89406;
+  font-size: 1.5em;
+  margin-right: 20px;
+}
+
+@media (min-width: 768px) {
+  .main-container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .main-container {
+    width: 700px;
+  }
+}
