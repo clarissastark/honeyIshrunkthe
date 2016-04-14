@@ -22,6 +22,8 @@ app.use(parser.urlencoded({ extended: true }));
 
 app.use("/assets", express.static("public"));
 
+app.set("port", process.env.PORT || 3001);
+
 app.set("view engine", "hbs");
 
 app.engine(".hbs", hbs({
@@ -102,6 +104,6 @@ app.post("/api/shorten", function(req, res){
 //   }))
 // }
 
-app.listen(3001, function(){
-  console.log("Here we go, Steelers, here we go!");
+app.listen(app.get("port"), function(){
+  console.log("I just blue myself!");
 });

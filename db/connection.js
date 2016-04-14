@@ -2,14 +2,14 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var config = require("../config");
 
-var CounterSchema = mongoose.Schema({
+var CounterSchema = Schema({
   _id: {type: String, required: true},
   seq: {type: Number, default: 0}
 });
 
 var counter = mongoose.model("Counter", CounterSchema);
 
-var UrlSchema = new mongoose.Schema({
+var UrlSchema = new Schema({
   _id: {type: Number, index: true},
   long_url: String,
   created_at: Date
@@ -34,14 +34,14 @@ UrlSchema.pre("save", function(next){
 var Url = mongoose.model("Url", UrlSchema);
 
 // for deploying for production
-// if(process.env.NODE_ENV == "production"){
-//   mongoose.connect(process.env.MONGOLAB_URL);
-// }else{
-//   mongoose.connect("mongodb://localhost/url_shortener");
-// }
+if(process.env.NODE_ENV == "production"){
+  mongoose.connect(process.env.MONGOLAB_URL);
+}else{
+  mongoose.connect("mongodb://localhost/url_shortener");
+}
 
 // create a connection to our MongoDB
-mongoose.connect("mongodb://" + config.db.host + "/" + config.db.name);
+// mongoose.connect("mongodb://" + config.db.host + "/" + config.db.name);
 // mongoose.connect("mongodb://localhost/url_shortener");
 
 module.exports = mongoose;
