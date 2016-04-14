@@ -61,7 +61,7 @@ app.post("/api/shorten", function(req, res){
   var shortUrl = "";
   // check if url already exists in database
   Url.findOne({long_url: longUrl}, function(err, docs){
-    if(doc){
+    if(docs){
       // URL has already been shortened, so base58 encodes the unique _id of that document and construct the short URL
       shortUrl = config.webhost + base58.encode(doc._id);
       // since the URL exists, returns it without creating a new entry
