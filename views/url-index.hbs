@@ -1,9 +1,32 @@
-<h1>URL Shortener</h1>
 
-<input id="url-field" type="text" class="form-control" placeholder="Paste a link...">
-  <span class="input-group-btn">
-    <button class="btn btn-shorten" type="button">SHORTEN</button>
-  </span>
+  <div class="row">
+    <form class="col s12">
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="url-field" type="text" class="form-control" placeholder="Paste your link here">
+          <span class="input-group-btn">
+            <button class="btn btn-shorten" type="button">SHORTEN</button>
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
 
+    <div id="link"></div>
 
-<div id="link"></div>
+    <table>
+      <thead>
+        <tr>
+            <th data-field="id">Short Link</th>
+            <th data-field="price">Created At<th>
+        </tr>
+      </thead>
+      <tbody>
+      {{#each urls as |url index|}}
+        <tr>
+          <td>{{urls.long_url}}</td>
+          <td>{{urls.created_at}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>

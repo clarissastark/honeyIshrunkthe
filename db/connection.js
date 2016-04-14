@@ -35,7 +35,7 @@ var Url = mongoose.model("Url", UrlSchema);
 
 // for deploying for production
 if(process.env.NODE_ENV == "production"){
-  mongoose.connect(process.env.MONGODB_URI);
+    mongoose.connect(process.env.MONGODB_URI);
 }else{
   mongoose.connect("mongodb://localhost/url_shortener");
 }
