@@ -1,0 +1,7 @@
+<h2>{{url.url}}</h2>
+
+<form action="/{{url.url}}" method="POST">
+  <input value={{url.url}} name="url[url]" placeholder="Enter your link here" type="text" />
+  <textarea name="url[description]">{{url.description}}</textarea>
+  <button type="submit">Shrink Me</button>
+</form>
