@@ -23,3 +23,6 @@ function encode(num){
       }
       return decoded;
     }
+
+module.exports.encode = encode;
+module.exports.decode = decode;

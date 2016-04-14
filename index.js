@@ -46,13 +46,13 @@ app.get("/:encoded_id", function(req, res){
   var id = base58.decode(base58Id);
 
   //checks if the URL already exists in db
-Url.findOne({_id: id}, function(err, docs){
+Url.findOne({_id: id}, function(err, doc){
   if (doc){
     res.redirect(doc.long_url);
   }else{
     res.redirect(config.webhost);
   }
-})
+});
 });
 
 // route to create and return a shortened URL given a long URL
@@ -60,8 +60,8 @@ app.post("/api/shorten", function(req, res){
   var longUrl = req.body.url;
   var shortUrl = "";
   // check if url already exists in database
-  Url.findOne({long_url: longUrl}, function(err, docs){
-    if(docs){
+  Url.findOne({long_url: longUrl}, function(err, doc){
+    if(doc){
       // URL has already been shortened, so base58 encodes the unique _id of that document and construct the short URL
       shortUrl = config.webhost + base58.encode(doc._id);
       // since the URL exists, returns it without creating a new entry
@@ -72,7 +72,7 @@ app.post("/api/shorten", function(req, res){
         long_url: longUrl
       });
       // saves the new link
-      newUrl.save(function(err, docs){
+      newUrl.save(function(err, doc){
         if(err){
           console.log(err);
         }
